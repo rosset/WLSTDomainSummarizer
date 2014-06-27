@@ -1175,6 +1175,7 @@ if v_didyoufindit == 'true':
 					nmDisconnect();
 					v_attemptNMConnect = 'null';
 				except:
+
 					print "";
 					print "Attempted connection failed";
 					v_nmConnected = 'nmConnect failed';
@@ -1372,6 +1373,7 @@ if v_didyoufindit == 'true':
 	print >>f, "<th colspan=2>Target(s)</th>"
 	print >>f, "<th rowspan=2>Driver Name</th>"
 	print >>f, "<th rowspan=2>Global Transactions Protocol</th>"
+	print >>f, "<th rowspan=2>User</th>"
 	print >>f, "<th rowspan=2>JDBC URL</th>"
 	print >>f, "</tr>"
 	print >>f, "<tr>"
@@ -1416,9 +1418,16 @@ if v_didyoufindit == 'true':
 		v_DriverName = get('DriverName');
 		v_JDBC_URL = get('Url');
 		
+		# Get username attribute from datasource Properties
+		# JDBCDriverParams/'+dsName+'/Properties/'+dsName+'/Properties/user') then get('Value') to recovery the username
+		cd ('Properties');
+		cd (x_jdbc);
+		cd ('Properties');
+		cd ('user');
+
+		v_User = get('Value');
 		
-		
-		cd ('../../');
+		cd ('../../../../../../');
 		
 		cd ('JDBCDataSourceParams');
 		cd (x_jdbc);
@@ -1439,6 +1448,7 @@ if v_didyoufindit == 'true':
 			v_JDBCType = 'Multi';
 			v_DriverName = 'n/a';
 			v_JDBC_URL = 'n/a';
+			v_User = 'n/a';
 			v_GlobalTransactionsProtocol = 'n/a';
 			v_MultiSourceFlag = 'true';
 		else:
@@ -1518,6 +1528,13 @@ if v_didyoufindit == 'true':
 						print >>f, "rowspan=";
 						print >>f, v_no_of_targets;
 						print >>f, ">";
+						print >>f, v_User;
+						print >>f, "</td>";
+					
+						print >>f, "<td";
+						print >>f, "rowspan=";
+						print >>f, v_no_of_targets;
+						print >>f, ">";
 						print >>f, v_JDBC_URL;
 						print >>f, "</td>";
 				
@@ -1540,6 +1557,10 @@ if v_didyoufindit == 'true':
 					
 				print >>f, "<td>";
 				print >>f, v_GlobalTransactionsProtocol;
+				print >>f, "</td>";
+					
+				print >>f, "<td>";
+				print >>f, v_User;
 				print >>f, "</td>";
 					
 				print >>f, "<td>";
